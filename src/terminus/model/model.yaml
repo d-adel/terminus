@@ -1,0 +1,447 @@
+id: urn:terminus:model:v0
+name: terminus
+description: Terminus object model, version 0.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  terminus: urn:terminus:model:v0#
+default_prefix: terminus
+imports:
+  - linkml:types
+default_range: string
+
+types:
+  Digest:
+    typeof: string
+    pattern: "^sha256:[0-9a-f]{64}$"
+
+enums:
+  Purpose:
+    permissible_values:
+      verification:
+      validation:
+  Operator:
+    permissible_values:
+      le:
+      ge:
+      between:
+  Quantifier:
+    permissible_values:
+      enumerated:
+  DecisionRuleType:
+    permissible_values:
+      guard_band:
+  Fidelity:
+    permissible_values:
+      exact:
+      approximate:
+      unsupported:
+      model_dependent:
+  ArgumentRole:
+    permissible_values:
+      supports:
+      refutes:
+  Admissibility:
+    permissible_values:
+      scheme:
+      pending_review:
+  Status:
+    permissible_values:
+      SUPPORTED:
+      FAILED:
+      NOT_ESTABLISHED:
+      OUT_OF_SCOPE:
+
+slots:
+  kind:
+    required: true
+  publisher:
+    required: true
+  name:
+    required: true
+  version:
+    required: true
+
+classes:
+  Any:
+    class_uri: linkml:Any
+
+  Measurand:
+    slots: [kind, publisher, name, version]
+    slot_usage:
+      kind:
+        equals_string: measurand
+    attributes:
+      unit:
+        required: true
+      definition:
+        required: true
+
+  Case:
+    slots: [kind, publisher, name, version]
+    slot_usage:
+      kind:
+        equals_string: case
+    attributes:
+      purpose:
+        range: Purpose
+        required: true
+      problem:
+        range: Any
+        required: true
+      observables:
+        multivalued: true
+        required: true
+
+  Predicate:
+    attributes:
+      operator:
+        range: Operator
+        required: true
+      limit:
+        range: float
+      lower:
+        range: float
+      upper:
+        range: float
+
+  DecisionRule:
+    attributes:
+      type:
+        range: DecisionRuleType
+        required: true
+      allow_zero_uncertainty:
+        range: boolean
+        required: true
+
+  Requirement:
+    attributes:
+      id:
+        required: true
+      measurand:
+        range: Digest
+        required: true
+      predicate:
+        range: Predicate
+        inlined: true
+        required: true
+      quantifier:
+        range: Quantifier
+        required: true
+      cases:
+        range: Digest
+        multivalued: true
+        required: true
+      decision_rule:
+        range: DecisionRule
+        inlined: true
+        required: true
+
+  AdapterPolicy:
+    attributes:
+      first_party_allowed:
+        range: boolean
+        required: true
+      accept_approximate:
+        range: boolean
+        required: true
+
+  SchemeClaim:
+    attributes:
+      id:
+        required: true
+      all_of:
+        multivalued: true
+        required: true
+
+  Scheme:
+    slots: [kind, publisher, name, version]
+    slot_usage:
+      kind:
+        equals_string: scheme
+    attributes:
+      requirements:
+        range: Requirement
+        multivalued: true
+        inlined_as_list: true
+        required: true
+      claims:
+        range: SchemeClaim
+        multivalued: true
+        inlined_as_list: true
+      inference_patterns:
+        multivalued: true
+        required: true
+      adapter_policy:
+        range: AdapterPolicy
+        inlined: true
+        required: true
+
+  Artifact:
+    slots: [kind, publisher, name]
+    slot_usage:
+      kind:
+        equals_string: artifact
+    attributes:
+      repo:
+        required: true
+      commit:
+        required: true
+
+  Adapter:
+    slots: [kind, publisher, name, version]
+    slot_usage:
+      kind:
+        equals_string: adapter
+    attributes:
+      repo:
+        required: true
+      commit:
+        required: true
+      artifact_name:
+        required: true
+
+  Execution:
+    slots: [kind, publisher]
+    slot_usage:
+      kind:
+        equals_string: execution
+    attributes:
+      case:
+        range: Digest
+        required: true
+      artifact:
+        range: Digest
+        required: true
+      adapter:
+        range: Digest
+        required: true
+      outcome:
+        required: true
+      run_record:
+        range: Digest
+        required: true
+      lab_run_id:
+        required: true
+
+  Facets:
+    attributes:
+      physical:
+        range: Fidelity
+        required: true
+      material:
+        range: Fidelity
+        required: true
+      observation:
+        range: Fidelity
+        required: true
+
+  Realization:
+    slots: [kind, publisher]
+    slot_usage:
+      kind:
+        equals_string: realization
+    attributes:
+      execution:
+        range: Digest
+        required: true
+      facets:
+        range: Facets
+        inlined: true
+        required: true
+      notes:
+
+  ObservedFile:
+    attributes:
+      name:
+        required: true
+      blob:
+        range: Digest
+        required: true
+
+  Observations:
+    slots: [kind, publisher]
+    slot_usage:
+      kind:
+        equals_string: observations
+    attributes:
+      execution:
+        range: Digest
+        required: true
+      files:
+        range: ObservedFile
+        multivalued: true
+        inlined_as_list: true
+        required: true
+
+  Calibration:
+    slots: [kind, publisher]
+    slot_usage:
+      kind:
+        equals_string: calibration
+    attributes:
+      target_artifact:
+        range: Digest
+        required: true
+      data:
+        range: Digest
+        multivalued: true
+        required: true
+      parameters:
+        range: Any
+        required: true
+
+  Procedure:
+    attributes:
+      repo:
+        required: true
+      commit:
+        required: true
+      entry:
+        required: true
+      source:
+        range: Digest
+
+  MeasurementResult:
+    slots: [kind, publisher]
+    slot_usage:
+      kind:
+        equals_string: measurement_result
+    attributes:
+      measurand:
+        range: Digest
+        required: true
+      case:
+        range: Digest
+        required: true
+      artifact:
+        range: Digest
+        required: true
+      value:
+        range: float
+        required: true
+      uncertainty:
+        range: float
+        required: true
+      unit:
+        required: true
+      procedure:
+        range: Procedure
+        inlined: true
+        required: true
+      was_derived_from:
+        range: Digest
+        multivalued: true
+        required: true
+      reference_data:
+        range: Digest
+        multivalued: true
+
+  Claim:
+    slots: [kind, publisher]
+    slot_usage:
+      kind:
+        equals_string: claim
+    attributes:
+      scheme:
+        range: Digest
+        required: true
+      requirement:
+        required: true
+      artifact:
+        range: Digest
+        required: true
+
+  Argument:
+    slots: [kind, publisher]
+    slot_usage:
+      kind:
+        equals_string: argument
+    attributes:
+      claim:
+        range: Digest
+        required: true
+      role:
+        range: ArgumentRole
+        required: true
+      pattern:
+        required: true
+      premises:
+        range: Digest
+        multivalued: true
+        required: true
+      witness:
+        range: Digest
+      author:
+        required: true
+      admissibility:
+        range: Admissibility
+        required: true
+
+  Evaluator:
+    attributes:
+      name:
+        required: true
+      version:
+        required: true
+
+  Reason:
+    attributes:
+      case:
+        range: Digest
+      claim:
+        range: Digest
+      finding:
+        required: true
+
+  Determination:
+    slots: [kind, publisher]
+    slot_usage:
+      kind:
+        equals_string: determination
+    attributes:
+      claim:
+        range: Digest
+        required: true
+      status:
+        range: Status
+        required: true
+      requested_scope:
+        range: Digest
+        multivalued: true
+        required: true
+      established_scope:
+        range: Digest
+        multivalued: true
+        required: true
+      arguments:
+        range: Digest
+        multivalued: true
+        required: true
+      used:
+        range: Digest
+        multivalued: true
+        required: true
+      reasons:
+        range: Reason
+        multivalued: true
+        inlined_as_list: true
+        required: true
+      notes:
+        multivalued: true
+        required: true
+      evaluator:
+        range: Evaluator
+        inlined: true
+        required: true
+
+  Release:
+    slots: [kind, publisher, name, version]
+    slot_usage:
+      kind:
+        equals_string: release
+    attributes:
+      object:
+        range: Digest
+        required: true
+      object_kind:
+        required: true

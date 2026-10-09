@@ -1,0 +1,962 @@
+{
+    "$defs": {
+        "Adapter": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "artifact_name": {
+                    "type": "string"
+                },
+                "commit": {
+                    "type": "string"
+                },
+                "kind": {
+                    "const": "adapter",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "repo": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "name",
+                "version",
+                "repo",
+                "commit",
+                "artifact_name"
+            ],
+            "title": "Adapter",
+            "type": "object"
+        },
+        "AdapterPolicy": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "accept_approximate": {
+                    "type": "boolean"
+                },
+                "first_party_allowed": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "first_party_allowed",
+                "accept_approximate"
+            ],
+            "title": "AdapterPolicy",
+            "type": "object"
+        },
+        "Admissibility": {
+            "description": "",
+            "enum": [
+                "scheme",
+                "pending_review"
+            ],
+            "title": "Admissibility",
+            "type": "string"
+        },
+        "Any": {
+            "additionalProperties": true,
+            "description": "",
+            "title": "Any",
+            "type": [
+                "null",
+                "boolean",
+                "object",
+                "number",
+                "string"
+            ]
+        },
+        "Argument": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "admissibility": {
+                    "$ref": "#/$defs/Admissibility"
+                },
+                "author": {
+                    "type": "string"
+                },
+                "claim": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "kind": {
+                    "const": "argument",
+                    "type": "string"
+                },
+                "pattern": {
+                    "type": "string"
+                },
+                "premises": {
+                    "items": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "role": {
+                    "$ref": "#/$defs/ArgumentRole"
+                },
+                "witness": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "claim",
+                "role",
+                "pattern",
+                "premises",
+                "author",
+                "admissibility"
+            ],
+            "title": "Argument",
+            "type": "object"
+        },
+        "ArgumentRole": {
+            "description": "",
+            "enum": [
+                "supports",
+                "refutes"
+            ],
+            "title": "ArgumentRole",
+            "type": "string"
+        },
+        "Artifact": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "commit": {
+                    "type": "string"
+                },
+                "kind": {
+                    "const": "artifact",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "repo": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "name",
+                "repo",
+                "commit"
+            ],
+            "title": "Artifact",
+            "type": "object"
+        },
+        "Calibration": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "data": {
+                    "items": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "kind": {
+                    "const": "calibration",
+                    "type": "string"
+                },
+                "parameters": {
+                    "$ref": "#/$defs/Any"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "target_artifact": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "target_artifact",
+                "data",
+                "parameters"
+            ],
+            "title": "Calibration",
+            "type": "object"
+        },
+        "Case": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "kind": {
+                    "const": "case",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "observables": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "problem": {
+                    "$ref": "#/$defs/Any"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "purpose": {
+                    "$ref": "#/$defs/Purpose"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "name",
+                "version",
+                "purpose",
+                "problem",
+                "observables"
+            ],
+            "title": "Case",
+            "type": "object"
+        },
+        "Claim": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "artifact": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "kind": {
+                    "const": "claim",
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "requirement": {
+                    "type": "string"
+                },
+                "scheme": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "scheme",
+                "requirement",
+                "artifact"
+            ],
+            "title": "Claim",
+            "type": "object"
+        },
+        "DecisionRule": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "allow_zero_uncertainty": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "$ref": "#/$defs/DecisionRuleType"
+                }
+            },
+            "required": [
+                "type",
+                "allow_zero_uncertainty"
+            ],
+            "title": "DecisionRule",
+            "type": "object"
+        },
+        "DecisionRuleType": {
+            "description": "",
+            "enum": [
+                "guard_band"
+            ],
+            "title": "DecisionRuleType",
+            "type": "string"
+        },
+        "Determination": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "arguments": {
+                    "items": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "claim": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "established_scope": {
+                    "items": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "evaluator": {
+                    "$ref": "#/$defs/Evaluator"
+                },
+                "kind": {
+                    "const": "determination",
+                    "type": "string"
+                },
+                "notes": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "reasons": {
+                    "items": {
+                        "$ref": "#/$defs/Reason"
+                    },
+                    "type": "array"
+                },
+                "requested_scope": {
+                    "items": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "status": {
+                    "$ref": "#/$defs/Status"
+                },
+                "used": {
+                    "items": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "claim",
+                "status",
+                "requested_scope",
+                "established_scope",
+                "arguments",
+                "used",
+                "reasons",
+                "notes",
+                "evaluator"
+            ],
+            "title": "Determination",
+            "type": "object"
+        },
+        "Evaluator": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "version"
+            ],
+            "title": "Evaluator",
+            "type": "object"
+        },
+        "Execution": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "adapter": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "artifact": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "case": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "kind": {
+                    "const": "execution",
+                    "type": "string"
+                },
+                "lab_run_id": {
+                    "type": "string"
+                },
+                "outcome": {
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "run_record": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "case",
+                "artifact",
+                "adapter",
+                "outcome",
+                "run_record",
+                "lab_run_id"
+            ],
+            "title": "Execution",
+            "type": "object"
+        },
+        "Facets": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "material": {
+                    "$ref": "#/$defs/Fidelity"
+                },
+                "observation": {
+                    "$ref": "#/$defs/Fidelity"
+                },
+                "physical": {
+                    "$ref": "#/$defs/Fidelity"
+                }
+            },
+            "required": [
+                "physical",
+                "material",
+                "observation"
+            ],
+            "title": "Facets",
+            "type": "object"
+        },
+        "Fidelity": {
+            "description": "",
+            "enum": [
+                "exact",
+                "approximate",
+                "unsupported",
+                "model_dependent"
+            ],
+            "title": "Fidelity",
+            "type": "string"
+        },
+        "Measurand": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "definition": {
+                    "type": "string"
+                },
+                "kind": {
+                    "const": "measurand",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "name",
+                "version",
+                "unit",
+                "definition"
+            ],
+            "title": "Measurand",
+            "type": "object"
+        },
+        "MeasurementResult": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "artifact": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "case": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "kind": {
+                    "const": "measurement_result",
+                    "type": "string"
+                },
+                "measurand": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "procedure": {
+                    "$ref": "#/$defs/Procedure"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "reference_data": {
+                    "items": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "uncertainty": {
+                    "type": "number"
+                },
+                "unit": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                },
+                "was_derived_from": {
+                    "items": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "measurand",
+                "case",
+                "artifact",
+                "value",
+                "uncertainty",
+                "unit",
+                "procedure",
+                "was_derived_from"
+            ],
+            "title": "MeasurementResult",
+            "type": "object"
+        },
+        "Observations": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "execution": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "files": {
+                    "items": {
+                        "$ref": "#/$defs/ObservedFile"
+                    },
+                    "type": "array"
+                },
+                "kind": {
+                    "const": "observations",
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "execution",
+                "files"
+            ],
+            "title": "Observations",
+            "type": "object"
+        },
+        "ObservedFile": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "blob": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "name",
+                "blob"
+            ],
+            "title": "ObservedFile",
+            "type": "object"
+        },
+        "Operator": {
+            "description": "",
+            "enum": [
+                "le",
+                "ge",
+                "between"
+            ],
+            "title": "Operator",
+            "type": "string"
+        },
+        "Predicate": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "limit": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "lower": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                },
+                "operator": {
+                    "$ref": "#/$defs/Operator"
+                },
+                "upper": {
+                    "type": [
+                        "number",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "operator"
+            ],
+            "title": "Predicate",
+            "type": "object"
+        },
+        "Procedure": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "commit": {
+                    "type": "string"
+                },
+                "entry": {
+                    "type": "string"
+                },
+                "repo": {
+                    "type": "string"
+                },
+                "source": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                }
+            },
+            "required": [
+                "repo",
+                "commit",
+                "entry"
+            ],
+            "title": "Procedure",
+            "type": "object"
+        },
+        "Purpose": {
+            "description": "",
+            "enum": [
+                "verification",
+                "validation"
+            ],
+            "title": "Purpose",
+            "type": "string"
+        },
+        "Quantifier": {
+            "description": "",
+            "enum": [
+                "enumerated"
+            ],
+            "title": "Quantifier",
+            "type": "string"
+        },
+        "Realization": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "execution": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "facets": {
+                    "$ref": "#/$defs/Facets"
+                },
+                "kind": {
+                    "const": "realization",
+                    "type": "string"
+                },
+                "notes": {
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "publisher": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "execution",
+                "facets"
+            ],
+            "title": "Realization",
+            "type": "object"
+        },
+        "Reason": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "case": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "claim": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "finding": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "finding"
+            ],
+            "title": "Reason",
+            "type": "object"
+        },
+        "Release": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "kind": {
+                    "const": "release",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "object": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "object_kind": {
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "name",
+                "version",
+                "object",
+                "object_kind"
+            ],
+            "title": "Release",
+            "type": "object"
+        },
+        "Requirement": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "cases": {
+                    "items": {
+                        "pattern": "^sha256:[0-9a-f]{64}$",
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "decision_rule": {
+                    "$ref": "#/$defs/DecisionRule"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "measurand": {
+                    "pattern": "^sha256:[0-9a-f]{64}$",
+                    "type": "string"
+                },
+                "predicate": {
+                    "$ref": "#/$defs/Predicate"
+                },
+                "quantifier": {
+                    "$ref": "#/$defs/Quantifier"
+                }
+            },
+            "required": [
+                "id",
+                "measurand",
+                "predicate",
+                "quantifier",
+                "cases",
+                "decision_rule"
+            ],
+            "title": "Requirement",
+            "type": "object"
+        },
+        "Scheme": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "adapter_policy": {
+                    "$ref": "#/$defs/AdapterPolicy"
+                },
+                "claims": {
+                    "items": {
+                        "$ref": "#/$defs/SchemeClaim"
+                    },
+                    "type": [
+                        "array",
+                        "null"
+                    ]
+                },
+                "inference_patterns": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "kind": {
+                    "const": "scheme",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "publisher": {
+                    "type": "string"
+                },
+                "requirements": {
+                    "items": {
+                        "$ref": "#/$defs/Requirement"
+                    },
+                    "type": "array"
+                },
+                "version": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "kind",
+                "publisher",
+                "name",
+                "version",
+                "requirements",
+                "inference_patterns",
+                "adapter_policy"
+            ],
+            "title": "Scheme",
+            "type": "object"
+        },
+        "SchemeClaim": {
+            "additionalProperties": false,
+            "description": "",
+            "properties": {
+                "all_of": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "id",
+                "all_of"
+            ],
+            "title": "SchemeClaim",
+            "type": "object"
+        },
+        "Status": {
+            "description": "",
+            "enum": [
+                "SUPPORTED",
+                "FAILED",
+                "NOT_ESTABLISHED",
+                "OUT_OF_SCOPE"
+            ],
+            "title": "Status",
+            "type": "string"
+        }
+    },
+    "$id": "urn:terminus:model:v0",
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "additionalProperties": true,
+    "metamodel_version": "1.11.0",
+    "title": "terminus",
+    "type": "object",
+    "version": null
+}
+

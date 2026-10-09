@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "terminus"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "rfc8785>=0.1.4",
+    "jsonschema>=4.26",
+    "securesystemslib[crypto]>=1.5.1",
+    "in-toto-attestation>=0.9.3",
+    "pint>=0.26",
+    "prov>=3.2.2",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "linkml>=1.11"]
+
+[project.scripts]
+terminus = "terminus.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"terminus.model" = ["model.yaml", "model.schema.json"]
+
+[tool.pytest.ini_options]
+pythonpath = ["tests"]
+testpaths = ["tests"]
